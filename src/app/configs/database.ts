@@ -7,8 +7,8 @@ async function connectToDatabase(): Promise<Connection> {
         port: parseInt(process.env.DB_PORT!),
         user: process.env.DB_USER!,
         password: process.env.DB_PASSWORD!,
-        database: process.env.DB_NAME!,
-        timezone: "Asia/Jakarta"
+        database: process.env.DB_NAME!
+        // timezone: "Asia/Jakarta"
     });
     return connection;
 }
@@ -29,7 +29,7 @@ export async function getQuery(arg: { query: string; type: "list" | "object"; pa
         }
     } catch (error) {
         console.error("Gagal menjalankan get query:", error);
-        return new Error(`${error}`.replace(process.env.DB_NAME || "database", "database"));
+        throw new Error(`${error}`.replace(process.env.DB_NAME || "database", "database"));
     } finally {
         if (connection) {
             await connection.end();
@@ -38,7 +38,7 @@ export async function getQuery(arg: { query: string; type: "list" | "object"; pa
 }
 
 // FOR INSERT, UPDATE, DELETE QUERY DATABASE
-export async function exeQuery(arg: { query: string; params?: any[] }): Promise<ResultSetHeader | Error> {
+export async function exeQuery(arg: { query: string; params?: any[] }): Promise<ResultSetHeader> {
     let connection;
     const valueParams = arg.params?.filter((item) => item !== undefined);
 
@@ -48,7 +48,7 @@ export async function exeQuery(arg: { query: string; params?: any[] }): Promise<
         return rows as ResultSetHeader;
     } catch (error) {
         console.error("Gagal menjalankan exequery:", error);
-        return new Error(`${error}`.replace(process.env.DB_NAME || "database", "database"));
+        throw new Error(`${error}`.replace(process.env.DB_NAME || "database", "database"));
     } finally {
         if (connection) {
             await connection.end();

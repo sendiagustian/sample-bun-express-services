@@ -1,7 +1,9 @@
 {
     "entryFile": "src/index.ts",
     "noImplicitAdditionalProperties": "throw-on-extras",
-    "controllerPathGlobs": ["src/routes/**/*.ts"],
+    "controllerPathGlobs": [
+        "src/routes/**/*.ts"
+    ],
     "routes": {
         "routesDir": "docs",
         "specVersion": 3
